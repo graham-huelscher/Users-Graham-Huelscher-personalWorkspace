@@ -4,9 +4,8 @@ class PlayerHand extends Component {
     render(){
 
         const cardsJSX = this.props.playerHand.map((card,i) => {
-            return <p>{card.face}</p>
+            return <p key={i}>{card.face}</p>
         })
-        console.log(cardsJSX)
 
         return (
             <div>

@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
-import PlayerHand from './PlayerHand'
 
-class PlayerBoard extends Component {
-    render(){
+class Dealer extends Component {
+    state = {
+        hand: [],
+        handTotal: 0
+    }
+    render() {
         return (
             <PlayerHand playerHand={this.props.playerHand} />
 
@@ -12,4 +15,4 @@ class PlayerBoard extends Component {
 
 
 
-export default PlayerBoard;
+export default Player;
