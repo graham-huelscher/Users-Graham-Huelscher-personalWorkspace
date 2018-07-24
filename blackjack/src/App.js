@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import Player from './Components/Player'
 import Dealer from './Components/Dealer'
+import BetForm from './Components/BetForm'
 
 
 function Card(face, suit, value) {
@@ -36,40 +37,63 @@ let createSixDeck = () => {
   return deck
 }
 
+
 class App extends Component {
 
   state = {
-    deck: this.props.firstDeck,
-    dealerHand: [],
-    dealerTotal: 0,
-    dealerBust: false,
+    startButton: true,
+    deck: null,    
     playerHand: [],
     playerTotal: 0,
     playerChips: this.props.playerChips,
     playerCurrentBet: 0,
-    playerBust: false
+    dealerHand: [],
+    dealerTotal: 0,
+    dealersTurn: null
   }
 
-  stillEnoughCards = () => {
-    return this.state.deck.length < 35
+  startGame = () => {
+    this.setState({
+      startButton: false,
+      deck: shuffleDeck(createSixDeck())
+    })
+  }
+
+  enoughCards = () => {
+    return this.state.deck.length > 35
   }
 
   sumHand = (hand) => {
     return hand.reduce((total, card) => total + card.value, 0)
   }
 
-  stateInitialize = () => {
-    let a = new Card('A', 'h', 11)
-    let b = new Card('6', 'h', 6)
-    let dealerHand = [a, b]
-    let playerHand = this.initialDeal()
+  collectBet = (playerCurrentBet) => {
+    playerCurrentBet = Number(playerCurrentBet)
     this.setState({
-      dealerHand,
-      dealerBust: false,
-      dealerTotal: this.sumHand(dealerHand),
+      playerCurrentBet
+    }, this.stateInitialize)
+  }
+
+  stateInitialize = () => {
+    let dealerHand = this.initialDeal()
+    let dealerTotal = this.sumHand(dealerHand)
+    let playerHand = this.initialDeal()
+    let playerTotal = this.sumHand(playerHand)
+    console.log(playerHand)
+    console.log(dealerHand)
+    if (this.blackJackCheck(playerTotal, dealerTotal)) {
+      console.log('player has blackjack!')
+      this.setState({
+        playerChips: this.state.playerChips + this.state.playerCurrentBet * 1.5
+      }, () => setTimeout(this.nextHand, 5000))
+
+    }
+    this.setState({
       playerHand,
-      playerBust: false,
-      playerTotal: this.sumHand(playerHand)
+      playerTotal,
+      dealerHand,
+      dealerTotal,
+      dealersTurn: false
     })
   }
 
@@ -89,13 +113,20 @@ class App extends Component {
 
   }
 
+  blackJackCheck = (playerTotal, dealerTotal) => {
+    if (playerTotal === 21 && dealerTotal !== 21) return true
+    else return false
+  }
+
   nextHand = () => {
-    if (this.stillEnoughCards()) {
+    if (!this.enoughCards()) {
       this.setState({
         deck: shuffleDeck(createSixDeck())
       })
     }
-    this.stateInitialize()
+    this.setState({
+      playerCurrentBet: 0
+    }, () => setTimeout(this.stateInitialize, 3000))
   }
 
   playerHit = () => {
@@ -108,27 +139,34 @@ class App extends Component {
   }
 
   playerCheck = () => {
-    if (this.bustCheck(this.state.playerHand, 'player')) {
+    let hand = this.state.playerHand
+    let handTotal = this.sumHand(hand)
+    let hasAnAce = this.aceCheck(hand)
+
+    if (handTotal > 21 && hasAnAce)
+      this.aceTransform(hand, 'player')
+    else if (handTotal > 21 && !hasAnAce) {
       this.setState({
-        playerResult: 'bust',
-        playerChips: this.state.playerChips - this.state.playerCurrentBet
+        playerChips: this.plusMinusChips('-')
       }, this.nextHand)
-      console.log('player Busts!')
+      console.log('player busts!')
+    }
+    else if (handTotal === 21) {
+      console.log('player stays')
+      this.playerStay()
     }
   }
 
   playerStay = () => {
-    this.dealerPlay(this.state.dealerHand, 'dealer')
+    this.setState({
+      dealersTurn: true
+    }, this.dealerPlay)
   }
 
-  bustCheck = (hand, person) => {
-    // let handTotal = this.sumHand(hand)
-    // if (handTotal > 21) {
-    //   if (this.aceCheckWithTransformOption(true, hand, person))
-    //     return false
-    //   else return true
-    // }
-    // else return false
+  plusMinusChips(operator) {
+    return (operator === '+' ?
+      this.state.playerChips + this.state.playerCurrentBet :
+      this.state.playerChips - this.state.playerCurrentBet)
   }
 
   aceCheck = (hand) => {
@@ -149,108 +187,98 @@ class App extends Component {
       [person + 'Hand']: newHand,
       [person + 'Total']: this.sumHand(newHand)
     }, () => {
-      if(person === 'dealer'){
-        this.dealerHit()
+      if (person === 'dealer') {
+        this.dealerPlay()
       }
     })
   }
 
   dealerPlay = () => {
     //ace condition not working
-    let hand = this.state.dealerHand
+    let hand = [...this.state.dealerHand]
     let handTotal = this.sumHand(hand)
+
     setTimeout(() => {
-
-      console.log('DealerPlay__')
-      console.log(hand)
-      console.log(handTotal)
-
-
-      //let bust = this.bustCheck(hand, 'dealer')
-      console.log(this.aceCheckWithTransformOption(false, hand, 'dealer'))
-      if (handTotal === 17 && this.aceCheck(hand))
+      let hasAnAce = this.aceCheck(hand)
+      if (handTotal === 17 && hasAnAce)
         this.dealerHit()
       else if (handTotal < 17)
         this.dealerHit()
-      else if (handTotal > 21 && this.aceCheck(hand)) {
+      else if (handTotal > 21 && hasAnAce)
         this.aceTransform(hand, 'dealer')
-        let aceIndex = this.getAceIndex(hand)
-        let newHand = [...hand]
-        newHand[aceIndex].value = 1
-        this.setState({
-          ['dealerHand']: newHand,
-          ['dealerTotal']: this.sumHand(newHand)
-        }, ()=>this.dealerPlay())
+      else if (handTotal > 21 && !hasAnAce) {
         console.log('dealer busts!')
+        this.setState({
+          playerChips: this.plusMinusChips('+')
+        }, this.nextHand)
       }
-      else console.log('dealer stays with ' + handTotal)
+      else {
+        console.log('dealer stays with ' + handTotal)
+        this.winCheck()
+      }
     }, 1500)
   }
 
   dealerHit = () => {
     let newDealerHand = [...this.state.dealerHand]
     newDealerHand.push(this.state.deck.pop())
-    this.setState({
-      dealerHand: this.sumHand(newDealerHand),
-      dealerTotal: 
-    }, () => {
-      console.log('dealerHit__________________')
-      console.log(this.state.dealerHand)
-      console.log(this.state.dealerTotal)
-      this.dealerPlay()
-    })
+    let newDealerTotal = this.sumHand(newDealerHand)
+    let hasAnAce = this.aceCheck(newDealerHand)
+    if (newDealerTotal > 21 && hasAnAce) {
+      this.aceTransform(newDealerHand, 'dealer')
+    }
+    else {
+      this.setState({
+        dealerHand: newDealerHand,
+        dealerTotal: newDealerTotal
+      }, () => {
+        this.dealerPlay()
+      })
+    }
   }
 
-  // dealerPlay = () => {
-  //   //ace condition not working
-  //   let hand = this.state.dealerHand
-  //   let handTotal = this.sumHand(hand)
-  //   setTimeout(() => {
-  //     console.log('dealerPlay_________________________')
-  //     console.log(hand)
-  //     console.log(handTotal)
-  //     let bust = this.bustCheck(hand, 'dealer')
+  winCheck = () => {
+    const { playerTotal, dealerTotal } = this.state
+    if (playerTotal > dealerTotal) {
+      console.log('player wins')
+      this.setState({
+        playerChips: this.plusMinusChips('+')
+      }, this.nextHand)
+    }
+    else if (dealerTotal > playerTotal) {
+      console.log('dealer wins')
+      this.setState({
+        playerChips: this.plusMinusChips('-')
+      })
+    }
+    else console.log('its a tie')
 
-  //     if (handTotal === 17 && this.aceCheckWithTransformOption(false, hand, 'dealer'))
-  //       this.dealerHit()
-  //     else if (handTotal < 17)
-  //       this.dealerHit()
-  //     else if (bust) {
-  //         console.log('dealer busts!')
-  //     }
-  //     else console.log('dealer stays with ' + handTotal)
-  //   }, 1500)
-  // }
-
-  // dealerHit = () => {
-  //   let newDealerHand = [...this.state.dealerHand]
-  //   newDealerHand.push(this.state.deck.pop())
-  //   this.setState({
-  //     dealerHand: newDealerHand,
-  //     dealerTotal: this.sumHand(newDealerHand)
-  //   }, () => { 
-  //     console.log('dealerHit__________________')
-  //     console.log(this.state.dealerHand)
-  //     console.log(this.state.dealerTotal)
-  //     this.dealerPlay()
-  //   })
-  // }
-
-  // winCheck = () => {
-  //   {playerBust}
-  //   if(!this.state.playerBust && !this.state.dealerBust){
-  //     if(thi)
-  //   }
-  // }
+    this.nextHand()
+  }
 
   render() {
+    const { playerHand, playerTotal, playerChips, playerCurrentBet, dealerHand, dealerTotal, dealersTurn } = this.state
+    let visibleDealerHand = (dealersTurn ? dealerHand : dealerHand.slice(0,1))
+    let visibleDealerTotal = (dealersTurn ? dealerTotal : '?')
     return (
       <div className="App">
-        <button onClick={this.stateInitialize} type="button" className="btn btn-success">Start Game</button>
-        <button onClick={this.playerHit} type="button" className="btn btn-success">Player hit</button>
-        <button onClick={this.playerStay} type="button" className="btn btn-success">Player stay</button>
-        <Player playerHand={this.state.playerHand} handTotal={this.state.playerTotal} />
-        <Dealer dealerHand={this.state.dealerHand} handTotal={this.state.dealerTotal} />
+        {this.state.startButton && <button onClick={this.startGame} type="button" className="btn btn-success">Start Game</button>}
+        {!this.state.startButton && (
+          <div>
+            {this.state.playerCurrentBet === 0 ? <BetForm collectBet={this.collectBet} /> : <div> <button onClick={this.playerHit} type="button" className="btn btn-success">Player hit</button>
+            <button onClick={this.playerStay} type="button" className="btn btn-success">Player stay</button>
+
+            <Player
+              playerHand={playerHand}
+              handTotal={playerTotal}
+              playerChips={playerChips}
+              collectBet={this.collectBet}
+              playerCurrentBet={playerCurrentBet}
+            />
+            <Dealer dealerHand={visibleDealerHand} handTotal={visibleDealerTotal} /> </div>}
+
+            
+          </div>)}
       </div>
     );
   }

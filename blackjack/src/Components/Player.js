@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import Hand from './Hand'
 import Summary from './Summary'
-import BetForm from './BetForm'
 
 class Player extends Component {
     render() {
+        const { playerHand, handTotal, playerChips, playerCurrentBet } = this.props
         return (
             <div>
-            <Hand hand={this.props.playerHand} />
-            <Summary handTotal={this.props.handTotal} />
+                <Hand hand={playerHand} />
+                <Summary handTotal={handTotal} playerChips={playerChips} playerCurrentBet={playerCurrentBet} />
             </div>
         )
     }
