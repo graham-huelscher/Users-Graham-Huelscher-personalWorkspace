@@ -1,18 +1,18 @@
 import React, { Component } from 'react';
+import Hand from './Hand'
+import Summary from './Summary'
 
 class Dealer extends Component {
-    state = {
-        hand: [],
-        handTotal: 0
-    }
     render() {
         return (
-            <PlayerHand playerHand={this.props.playerHand} />
-
+            <div>
+                <Hand hand={this.props.dealerHand} />
+                <Summary handTotal={this.props.handTotal} />
+            </div>
         )
     }
 }
 
 
 
-export default Player;
+export default Dealer;
