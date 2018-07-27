@@ -5,8 +5,8 @@ class Dealer extends Component {
     render() {
         return (
             <div>
+                {this.props.handTotal}
                 <Hand hand={this.props.dealerHand} />
-                <div>{this.props.handTotal} </div>
             </div>
         )
     }

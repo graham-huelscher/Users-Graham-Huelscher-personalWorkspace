@@ -142,7 +142,6 @@ class App extends Component {
   }
 
   dealerPlay = () => {
-    //ace condition not working
     let hand = [...this.state.dealerHand]
     let handTotal = sumHand(hand)
 
@@ -211,37 +210,46 @@ class App extends Component {
     return (
       <div className="App">
         {this.state.startButton && <button onClick={this.startGame} type="button" className="btn btn-success">Start Game</button>}
+
+
         {!this.state.startButton && (
-          <div>
+          <div className='container'>
             {this.state.playerCurrentBet === 0 ?
               <div>
                 <BetForm collectBet={this.collectBet} />
               </div> :
               <div>
-                <div className='container'>
-                  <div className="row">
-                    <Dealer dealerHand={visibleDealerHand} handTotal={visibleDealerTotal} />
-                  </div>
-                  <div className="row">
-                    This is where the messages go
-                  </div>
-
+                <div className="row dealer-row">
+                  <Dealer dealerHand={visibleDealerHand} handTotal={visibleDealerTotal} />
                 </div>
-                <button onClick={this.playerHit} type="button" className="btn btn-success">Player hit</button>
-                <button onClick={this.playerStay} type="button" className="btn btn-success">Player stay</button>
+                <div className="row">
+                  <h1 className="message-area">This is where the messages go</h1>
+                </div>
+                <div className="row player-row">
+                  <div className="row">
+                    <div>
+                      <button onClick={this.playerHit} type="button" className="btn btn-success">Player hit</button>
+                      <button onClick={this.playerStay} type="button" className="btn btn-success">Player stay</button>
+                    </div>
+                  </div>
+                  <Player
+                    playerHand={playerHand}
+                    handTotal={playerTotal}
+                    playerChips={playerChips}
+                    collectBet={this.collectBet}
+                    playerCurrentBet={playerCurrentBet}
+                  />
 
-                <Player
-                  playerHand={playerHand}
-                  handTotal={playerTotal}
-                  playerChips={playerChips}
-                  collectBet={this.collectBet}
-                  playerCurrentBet={playerCurrentBet}
-                />
+                  <ChipSummary playerChips={this.state.playerChips} playerCurrentBet={this.state.playerCurrentBet} />
+                </div>
               </div>}
 
-              
-            <ChipSummary playerChips={this.state.playerChips} playerCurrentBet={this.state.playerCurrentBet} />
+
           </div>)}
+
+
+
+
       </div>
     );
   }

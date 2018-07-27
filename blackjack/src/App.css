@@ -1,3 +1,20 @@
 .App {
   text-align: center;
 }
+
+.dealer-row{
+  height: 250px;
+}
+
+.player-row{
+  height: 250px;
+}
+
+.shrink-img{
+  height: 60%;
+  width: auto;
+}
+
+.message-area{
+  margin: auto;
+}
