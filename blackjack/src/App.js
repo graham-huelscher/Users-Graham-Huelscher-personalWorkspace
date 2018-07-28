@@ -10,8 +10,6 @@ const { shuffleDeck, createSixDeck } = DeckFunctions
 const { sumHand, doubleAcesCheck, blackJackCheck, aceCheck, getAceIndex } = HelperFunctions
 
 
-
-
 class App extends Component {
 
   state = {
@@ -23,7 +21,8 @@ class App extends Component {
     playerCurrentBet: 0,
     dealerHand: [],
     dealerTotal: 0,
-    dealersTurn: null
+    dealersTurn: null,
+    message: `Player's turn`
   }
 
   startGame = () => {
@@ -63,7 +62,8 @@ class App extends Component {
       playerTotal,
       dealerHand,
       dealerTotal,
-      dealersTurn: false
+      dealersTurn: false,
+      message: `Player's turn`
     })
   }
 
@@ -84,7 +84,7 @@ class App extends Component {
     }
     setTimeout(() => this.setState({
       playerCurrentBet: 0
-    }), 2000)
+    }), 4000)
   }
 
   playerHit = () => {
@@ -107,10 +107,9 @@ class App extends Component {
       this.setState({
         playerChips: this.plusMinusChips('-')
       }, this.nextHand)
-      console.log('player busts!')
+      this.setMessage(`Player busts! Player loses ${this.state.playerCurrentBet} chips`)
     }
     else if (handTotal === 21) {
-      console.log('player stays')
       this.playerStay()
     }
   }
@@ -119,6 +118,7 @@ class App extends Component {
     this.setState({
       dealersTurn: true
     }, this.dealerPlay)
+    this.setMessage(`Dealer's turn`)
   }
 
   plusMinusChips(operator) {
@@ -154,13 +154,13 @@ class App extends Component {
       else if (handTotal > 21 && hasAnAce)
         this.aceTransform(hand, 'dealer')
       else if (handTotal > 21 && !hasAnAce) {
-        console.log('dealer busts!')
+        this.setMessage(`Dealer busts! Player wins ${this.state.playerCurrentBet} chips`)
         this.setState({
           playerChips: this.plusMinusChips('+')
         }, this.nextHand)
       }
       else {
-        console.log('dealer stays with ' + handTotal)
+        this.setMessage('Dealer stays with ' + handTotal)
         this.winCheck()
       }
     }, 1500)
@@ -185,22 +185,30 @@ class App extends Component {
   }
 
   winCheck = () => {
-    const { playerTotal, dealerTotal } = this.state
-    if (playerTotal > dealerTotal) {
-      console.log('player wins')
-      this.setState({
-        playerChips: this.plusMinusChips('+')
-      })
-    }
-    else if (dealerTotal > playerTotal) {
-      console.log('dealer wins')
-      this.setState({
-        playerChips: this.plusMinusChips('-')
-      })
-    }
-    else console.log('its a tie')
+    setTimeout(() => {
+      const { playerTotal, dealerTotal } = this.state
+      if (playerTotal > dealerTotal) {
+        this.setMessage(`Player wins! ${this.state.playerCurrentBet} chips added.`)
+        this.setState({
+          playerChips: this.plusMinusChips('+')
+        })
+      }
+      else if (dealerTotal > playerTotal) {
+        this.setMessage(`Player loses. ${this.state.playerCurrentBet} chips lost.`)
+        this.setState({
+          playerChips: this.plusMinusChips('-')
+        })
+      }
+      else this.setMessage(`It's a push.`)
 
-    this.nextHand()
+      this.nextHand()
+    }, 2000);
+  }
+
+  setMessage = (message) => {
+    this.setState({
+      message
+    })
   }
 
   render() {
@@ -209,47 +217,57 @@ class App extends Component {
     let visibleDealerTotal = (dealersTurn ? dealerTotal : '?')
     return (
       <div className="App">
-        {this.state.startButton && <button onClick={this.startGame} type="button" className="btn btn-success">Start Game</button>}
+        {this.state.startButton && <button onClick={this.startGame} type="button" className="btn btn-success centralize">Start Game</button>}
 
 
         {!this.state.startButton && (
-          <div className='container'>
-            {this.state.playerCurrentBet === 0 ?
-              <div>
+          this.state.playerCurrentBet === 0 ?
+            <div className='container'>
+              <div className='centralize'>
+                <h3>Place bet for the next hand</h3>
+              </div>
+              <div className='bet'>
                 <BetForm collectBet={this.collectBet} />
-              </div> :
+              </div>
               <div>
-                <div className="row dealer-row">
-                  <Dealer dealerHand={visibleDealerHand} handTotal={visibleDealerTotal} />
-                </div>
-                <div className="row">
-                  <h1 className="message-area">This is where the messages go</h1>
-                </div>
-                <div className="row player-row">
-                  <div className="row">
-                    <div>
-                      <button onClick={this.playerHit} type="button" className="btn btn-success">Player hit</button>
-                      <button onClick={this.playerStay} type="button" className="btn btn-success">Player stay</button>
+                <h5>Current chip count: {this.state.playerChips} </h5>
+              </div>
+            </div> :
+            <div className='container'>
+              <div className='row'>
+                <h1>Dealer's Cards</h1>
+              </div>
+              <div className="row dealer-row">
+                <Dealer dealerHand={visibleDealerHand} handTotal={visibleDealerTotal} />
+              </div>
+              <div className="row">
+                <h1 className="message-area"><strong>{this.state.message}</strong></h1>
+              </div>
+              <div className='row player-box'>
+                <div className='col-12 col-sm-12 col-md-12 col-lg-12'>
+                  <div className='row player-info'>
+                    <button onClick={this.playerHit} type="button" className="btn btn-success game-btn">HIT</button>
+                    <button onClick={this.playerStay} type="button" className="btn btn-danger game-btn">STAY</button>
+                    {/* <button onClick={this.playerDoubleDown} type="button" className="btn btn-warning game-btn">DOUBLE</button> */}
+
+                    <div className='hand-total'>
+                      <h3> Hand total is: {sumHand(this.state.playerHand)} </h3>
                     </div>
+
+                    <ChipSummary playerChips={this.state.playerChips} playerCurrentBet={this.state.playerCurrentBet} />
                   </div>
-                  <Player
-                    playerHand={playerHand}
-                    handTotal={playerTotal}
-                    playerChips={playerChips}
-                    collectBet={this.collectBet}
-                    playerCurrentBet={playerCurrentBet}
-                  />
-
-                  <ChipSummary playerChips={this.state.playerChips} playerCurrentBet={this.state.playerCurrentBet} />
                 </div>
-              </div>}
 
-
-          </div>)}
-
-
-
-
+                <Player
+                  playerHand={playerHand}
+                  handTotal={playerTotal}
+                  playerChips={playerChips}
+                  collectBet={this.collectBet}
+                  playerCurrentBet={playerCurrentBet}
+                />
+              </div>
+            </div>)
+        }
       </div>
     );
   }

@@ -1,20 +1,73 @@
+body{
+  color: #C0C0C0;
+}
+
 .App {
   text-align: center;
 }
 
-.dealer-row{
-  height: 250px;
+.centralize {
+  margin: 350px auto 0 auto;
 }
 
-.player-row{
-  height: 250px;
+.bet {
+  width: 40%;
+  margin:auto;
 }
+
+.container{
+  height: 100%;
+}
+
+.dealer-row {
+  border: solid #C0C0C0 4px;
+  padding: 2% 0;
+}
+
+.player-box {
+  border: solid white 4px;
+  padding-bottom: 2%;
+}
+
+.dealer-row, .player-box{
+  border-radius: 5px;
+ } 
 
 .shrink-img{
   height: 100%;
   width: auto;
 }
 
-.message-area{
+h1{
   margin: auto;
+}
+
+.message-area{
+  color: white;
+  padding: 3% 0;
+}
+
+.player-info {
+  display: flex;
+}
+
+.chipSummary {
+  border: solid white 4px;
+  border-bottom-left-radius: 5px;
+  justify-content: right;
+  color:white;
+  padding: 5px;
+}
+
+.game-btn{
+  margin: 5px;
+}
+
+.hand-total{
+  color:white;
+  border: solid white 4px;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  margin: 0 auto auto auto;
+  padding: 5px;
 }

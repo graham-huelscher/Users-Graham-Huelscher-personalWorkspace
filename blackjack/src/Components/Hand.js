@@ -8,11 +8,11 @@ class Hand extends Component {
             margin: '0px 10px'
         }
         const cardsJSX = this.props.hand.map((card, i) => {
-            return <img key={i} style={cardStyle} src={'./cards/' + card.face + '-' + card.suit + '.svg'} alt="test" />
+            return <img className='img-fluid' key={i} style={cardStyle} src={'./cards/' + card.face + '-' + card.suit + '.svg'} alt="test" />
         })
 
         return (
-            <div >
+            <div>
                 {cardsJSX}
                 {(this.props.hand.length === 1 ? <img style={{
                     width: '150px',

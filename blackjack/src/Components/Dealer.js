@@ -4,8 +4,7 @@ import Hand from './Hand'
 class Dealer extends Component {
     render() {
         return (
-            <div>
-                {this.props.handTotal}
+            <div style={{margin: 'auto'}}>
                 <Hand hand={this.props.dealerHand} />
             </div>
         )

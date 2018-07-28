@@ -3,11 +3,10 @@ import Hand from './Hand'
 
 class Player extends Component {
     render() {
-        const { playerHand, handTotal} = this.props
+        const { playerHand } = this.props
         return (
-            <div>
+            <div style={{margin: 'auto'}}>
                 <Hand hand={playerHand} />
-                <div>{handTotal}</div>
             </div>
         )
     }
