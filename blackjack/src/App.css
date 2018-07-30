@@ -71,3 +71,8 @@ h1{
   margin: 0 auto auto auto;
   padding: 5px;
 }
+
+.double-down {
+  transform: rotate(90deg);
+  padding-bottom: 50px !important;
+}

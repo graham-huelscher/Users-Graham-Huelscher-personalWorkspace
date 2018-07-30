@@ -5,10 +5,13 @@ class Hand extends Component {
         let cardStyle = {
             width: '150px',
             height: 'auto',
-            margin: '0px 10px'
+            margin: '0px 10px',
         }
         const cardsJSX = this.props.hand.map((card, i) => {
-            return <img className='img-fluid' key={i} style={cardStyle} src={'./cards/' + card.face + '-' + card.suit + '.svg'} alt="test" />
+            let transformClass = ''
+            if(card.doubleDown) transformClass = 'double-down'
+            return <img className={transformClass + ' img-fluid'} key={i} style={cardStyle} src={'./cards/' + card.face + '-' + card.suit + '.svg'} alt="test" />
+            
         })
 
         return (
