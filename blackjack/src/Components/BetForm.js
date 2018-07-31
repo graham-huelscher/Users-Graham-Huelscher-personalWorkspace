@@ -12,7 +12,9 @@ class BetForm extends Component {
                     <span className="input-group-btn">
                         <button type="submit" className="btn btn-warning">Place bet</button>
                     </span>
-                    <input defaultValue={500} type="number" step="500" className="form-control" name='bet' required placeholder="Enter your bet, incements of 500 only" autoComplete="off" />
+                    <input defaultValue={500} type="number" step="500" className="form-control" 
+                    name='bet' required placeholder="Enter your bet, incements of 500 only" autoComplete="off" 
+                    min='0' max={this.props.playerChips}/>
                 </div>
             </form>
         )
