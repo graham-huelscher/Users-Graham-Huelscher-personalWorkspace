@@ -24,8 +24,9 @@ export class HeroService {
     this.messageService.add(`HeroService: ${message}`)
   }
 
-  private heroesUrl = 'api/heroes';  // URL to web api
+  private heroesUrl = 'http://localhost:8080/api/heroes';  // URL to web api
 
+  /* GET all heroes */
   getHeroes(): Observable<Hero[]> {
     return this.http.get<Hero[]>(this.heroesUrl)
       .pipe(
