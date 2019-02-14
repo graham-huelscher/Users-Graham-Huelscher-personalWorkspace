@@ -1,5 +1,6 @@
 //const Todos = require('../model/todos')
 const Hero = require('../model/Hero')
+const HeroesDB = require('../model/Hero')
 
 let heroes = [
   { id: 11, name: 'Mr. Nice' },
@@ -14,6 +15,8 @@ let heroes = [
   { id: 20, name: 'Tornado' }
 ];
 
+
+
 const genId = (heroes) => {
   return heroes.length > 0 ? Math.max(...heroes.map(hero => hero.id)) + 1 : 11;
 }
@@ -21,7 +24,9 @@ const genId = (heroes) => {
 const HeroesController = {
   getAllHeroes: () => {
     return new Promise((resolve, reject) => {
-      resolve(heroes);
+      HeroesDB.findAll({raw: true}).then(heroes => {
+        resolve(heroes)
+      })
     })
   },
   searchHeroes: (searchTerm) => {
