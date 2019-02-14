@@ -1,6 +1,6 @@
-//const Todos = require('../model/todos')
-const Hero = require('../model/Hero')
-const HeroesDB = require('../model/Hero')
+const HeroesDB = require('../model/HeroDB')
+const Sequelize = require('sequelize')
+const Op = Sequelize.Op;
 
 let heroes = [
   { id: 11, name: 'Mr. Nice' },
@@ -14,17 +14,24 @@ let heroes = [
   { id: 19, name: 'Magma' },
   { id: 20, name: 'Tornado' }
 ];
-
-
-
-const genId = (heroes) => {
-  return heroes.length > 0 ? Math.max(...heroes.map(hero => hero.id)) + 1 : 11;
-}
+// let heroes = [
+//   ( N'Mr. Nice' ),
+//    (N'Narco' ),
+//    (N'Bombasto' ),
+//   (N'Celeritas' ),
+//  (N'Magneta' ),
+//   (N'RubberMan' ),
+//    (N'Dynama' ),
+//    (N'Dr IQ' ),
+//    (N'Magma' ),
+//    (N'Tornado' )
+// ];
 
 const HeroesController = {
   getAllHeroes: () => {
     return new Promise((resolve, reject) => {
-      HeroesDB.findAll({raw: true}).then(heroes => {
+      HeroesDB.findAll()
+      .then(heroes => {
         resolve(heroes)
       })
     })
@@ -32,42 +39,46 @@ const HeroesController = {
   searchHeroes: (searchTerm) => {
     return new Promise((resolve, reject) => {
 
-    const filteredHeroes = heroes.filter(hero => {
-      return hero.name.includes(searchTerm)
-      })
-
-      resolve(filteredHeroes);
+      HeroesDB.findAll({ where: { name: { [Op.like]: '%' + searchTerm + '%' } } })
+        .then(filteredHeroes => {
+          resolve(filteredHeroes)
+        })
     })
   },
   getHero: (id) => {
     return new Promise((resolve, reject) => {
-      resolve(heroes.find(hero => hero.id === id));
+      HeroesDB.findByPk(id).then(hero => {
+        resolve(hero);
+      })
     });
   },
   addHero: (heroName) => {
     return new Promise((resolve, reject) => {
-      
-      const id = genId(heroes);
-      const newHero = new Hero(heroName, id);
 
-      heroes.push(newHero);
-      resolve(newHero);
+      HeroesDB.create({ name: heroName })
+        .then(hero => {
+        const plainHero = hero.get({ plain: true })
+        resolve(plainHero)
+      });
     });
   },
   updateHero: (Hero) => {
     return new Promise((resolve, reject) => {
-      console.log(Hero)
 
-      const indexToUpdate = heroes.findIndex(hero => hero.id === Hero.id)
-      heroes[indexToUpdate].name = Hero.name;
-
-      resolve("Updated");
+      HeroesDB.update({ name: Hero.name },
+        { where: { id: Hero.id } }
+      ).then(() => {
+        resolve(200);
+      });
     });
   },
   deleteHero: (id) => {
     return new Promise((resolve, reject) => {
-      heroes = heroes.filter(hero => hero.id !== id)
-      resolve(heroes);
+      HeroesDB.destroy({
+        where: { id: id }
+      }).then(() => {
+        resolve(200)
+      });
     });
   }
 }

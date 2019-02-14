@@ -8,16 +8,16 @@ const Hero = require('../model/Hero')
 router.get('/', (req, res) => {
     const hasQueryParameter = req.query.name !== undefined
 
-    if(!hasQueryParameter){
-    HeroesController
-        .getAllHeroes()
-        .then(heroes => res.json(heroes))
+    if (!hasQueryParameter) {
+        HeroesController
+            .getAllHeroes()
+            .then(heroes => res.json(heroes))
     }
-    else{
+    else {
         const searchTerm = req.query.name
         HeroesController
-        .searchHeroes(searchTerm)
-        .then(heroes => res.json(heroes))
+            .searchHeroes(searchTerm)
+            .then(heroes => res.json(heroes))
     }
 })
 
@@ -36,18 +36,18 @@ router.post('/', (req, res) => {
 })
 
 router.put('/', (req, res) => {
-    const { name, id} = req.body;
-    const heroToUpdate = new Hero(name, id)
+    const { name, id } = req.body;
+    const heroToUpdate = new Hero(id, name)
     HeroesController
         .updateHero(heroToUpdate)
-        .then(hero => res.json(hero))
+        .then(response => res.json(response))
 })
 
-router.delete('/:id',(req,res) => {
+router.delete('/:id', (req, res) => {
     const { id } = req.params;
     HeroesController
         .deleteHero(Number(id))
-        .then(heroes => res.json(heroes))
+        .then(response => res.json(response))
 })
 
 module.exports = router
