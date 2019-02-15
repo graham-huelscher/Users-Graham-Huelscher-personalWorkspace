@@ -12,7 +12,6 @@ const db = new Sequelize(env.database, env.username, env.password, {
     acquire: 30000,
     idle: 10000
   },
-  omitNull: true,
   query:{raw:true}
 });
 
