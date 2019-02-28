@@ -1,0 +1,14 @@
+C:\Users\graha\personal-workspace\angular-tour-of-heroes\backend-dotNet\HeroesApi\HeroesApi\bin\Debug\netcoreapp2.2\HeroesApi.deps.json
+C:\Users\graha\personal-workspace\angular-tour-of-heroes\backend-dotNet\HeroesApi\HeroesApi\bin\Debug\netcoreapp2.2\HeroesApi.runtimeconfig.json
+C:\Users\graha\personal-workspace\angular-tour-of-heroes\backend-dotNet\HeroesApi\HeroesApi\bin\Debug\netcoreapp2.2\HeroesApi.runtimeconfig.dev.json
+C:\Users\graha\personal-workspace\angular-tour-of-heroes\backend-dotNet\HeroesApi\HeroesApi\bin\Debug\netcoreapp2.2\HeroesApi.dll
+C:\Users\graha\personal-workspace\angular-tour-of-heroes\backend-dotNet\HeroesApi\HeroesApi\bin\Debug\netcoreapp2.2\HeroesApi.pdb
+C:\Users\graha\personal-workspace\angular-tour-of-heroes\backend-dotNet\HeroesApi\HeroesApi\obj\Debug\netcoreapp2.2\HeroesApi.csprojAssemblyReference.cache
+C:\Users\graha\personal-workspace\angular-tour-of-heroes\backend-dotNet\HeroesApi\HeroesApi\obj\Debug\netcoreapp2.2\HeroesApi.csproj.CoreCompileInputs.cache
+C:\Users\graha\personal-workspace\angular-tour-of-heroes\backend-dotNet\HeroesApi\HeroesApi\obj\Debug\netcoreapp2.2\HeroesApi.RazorAssemblyInfo.cache
+C:\Users\graha\personal-workspace\angular-tour-of-heroes\backend-dotNet\HeroesApi\HeroesApi\obj\Debug\netcoreapp2.2\HeroesApi.RazorAssemblyInfo.cs
+C:\Users\graha\personal-workspace\angular-tour-of-heroes\backend-dotNet\HeroesApi\HeroesApi\obj\Debug\netcoreapp2.2\HeroesApi.AssemblyInfoInputs.cache
+C:\Users\graha\personal-workspace\angular-tour-of-heroes\backend-dotNet\HeroesApi\HeroesApi\obj\Debug\netcoreapp2.2\HeroesApi.AssemblyInfo.cs
+C:\Users\graha\personal-workspace\angular-tour-of-heroes\backend-dotNet\HeroesApi\HeroesApi\obj\Debug\netcoreapp2.2\HeroesApi.RazorTargetAssemblyInfo.cache
+C:\Users\graha\personal-workspace\angular-tour-of-heroes\backend-dotNet\HeroesApi\HeroesApi\obj\Debug\netcoreapp2.2\HeroesApi.dll
+C:\Users\graha\personal-workspace\angular-tour-of-heroes\backend-dotNet\HeroesApi\HeroesApi\obj\Debug\netcoreapp2.2\HeroesApi.pdb

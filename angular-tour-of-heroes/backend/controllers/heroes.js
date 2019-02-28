@@ -20,6 +20,7 @@ const HeroesController = {
     return new Promise((resolve, reject) => {
       HeroesDB.findAll()
       .then(heroes => {
+        console.log(heroes)
         resolve(heroes)
       })
     })

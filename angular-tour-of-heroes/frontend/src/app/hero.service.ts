@@ -24,7 +24,8 @@ export class HeroService {
     this.messageService.add(`HeroService: ${message}`)
   }
 
-  private heroesUrl = 'http://localhost:8080/api/heroes';  // URL to web api
+  private heroesUrl = 'https://localhost:44321/api/heroes';  // URL to web api
+  private searchUrl = 'https://localhost:44321/api/search'
 
   /* GET all heroes */
   getHeroes(): Observable<Hero[]> {
@@ -42,7 +43,7 @@ export class HeroService {
       return of([]);
     }
 
-    return this.http.get<Hero[]>(`${this.heroesUrl}/?name=${term}`).pipe(
+    return this.http.get<Hero[]>(`${this.searchUrl}/?term=${term}`).pipe(
       tap(_ => this.log(`found heroes matching "${term}"`)),
       catchError(this.handleError<Hero[]>('searchHeroes', []))
     );
