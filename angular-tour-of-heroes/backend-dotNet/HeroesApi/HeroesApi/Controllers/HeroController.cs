@@ -17,19 +17,13 @@ namespace HeroesApi.Controllers
             _context = context;
 
         }
-        
-        [HttpGet]
-        [Route("/search")]
-        public async Task<ActionResult<IEnumerable<Hero>>> SearchHeroes()
-        {
-            return await _context.Heroes.ToListAsync();
-        }
 
         // GET: api/heroes
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Hero>>> GetHeroes()
         {
-            return await _context.Heroes.FromSql("select Heroes.id, Heroes.name, Heroes.heroType, HeroTypes.type from Heroes, HeroTypes Where Heroes.heroType = HeroTypes.id").ToListAsync();
+            return await _context.Heroes.ToListAsync();
+            //FromSql("select Heroes.id, Heroes.name, Heroes.heroType, HeroTypes.type from Heroes, HeroTypes Where Heroes.heroType = HeroTypes.id").ToListAsync();
         }
 
         // GET: api/heroes/5

@@ -58,7 +58,7 @@ namespace HeroesApi.Models
                 entity.HasOne(d => d.HeroTypeNavigation)
                     .WithMany(p => p.Heroes)
                     .HasForeignKey(d => d.heroType)
-                    .HasConstraintName("FK__Hero__heroType__5CD6CB2B");
+                    .HasConstraintName("FK__Heroes__heroType__5CD6CB2B");
             });
         }
     }
