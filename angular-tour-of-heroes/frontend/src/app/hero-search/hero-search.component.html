@@ -1,12 +1,31 @@
 <div id="search-component">
   <h4>Hero Search</h4>
- 
-  <input #searchBox id="search-box" (input)="search(searchBox.value)" autocomplete="off"/>
- 
+
+  <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" (change)="search()" [(ngModel)]="heroType">
+    <label ngbButtonLabel class="btn-primary">
+      <input ngbButton type="radio" [value]="0"> All
+    </label>
+    <label ngbButtonLabel class="btn-primary">
+      <input ngbButton type="radio" [value]="1"> Superhero
+    </label>
+    <label ngbButtonLabel class="btn-primary">
+      <input ngbButton type="radio" [value]="2"> Anti-hero
+    </label>
+    <label ngbButtonLabel class="btn-primary">
+      <input ngbButton type="radio" [value]="3"> Villain
+    </label>
+    <label ngbButtonLabel class="btn-primary">
+      <input ngbButton type="radio" [value]="4"> Sidekick
+    </label>
+  </div>
+  <input #searchBox id="search-box" (input)="search()" autocomplete="off" [(ngModel)]="searchTerm" />
+
+
   <ul class="search-result">
-    <li *ngFor="let hero of heroes$ | async" >
+    <!-- <li *ngFor="let hero of heroes$ | async "> -->
+    <li *ngFor="let hero of queryHeroes">
       <a routerLink="/detail/{{hero.id}}">
-        {{hero.name}}
+        {{hero.name + " " + hero.heroType}}
       </a>
     </li>
   </ul>

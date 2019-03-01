@@ -6,6 +6,23 @@
       <input [(ngModel)]="hero.name" placeholder="name">
     </label>
   </div>
-  <button (click)="goBack()">go back</button>
+  <div>
+      <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" [(ngModel)]="hero.heroType">
+          <label ngbButtonLabel class="btn-primary">
+            <input ngbButton type="radio" [value]="1"> Superhero
+          </label>
+          <label ngbButtonLabel class="btn-primary">
+            <input ngbButton type="radio" [value]="2"> Antihero
+          </label>
+          <label ngbButtonLabel class="btn-primary">
+            <input ngbButton type="radio" [value]="3"> Villain
+          </label>
+          <label ngbButtonLabel class="btn-primary">
+            <input ngbButton type="radio" [value]="4"> Sidekick
+          </label>
+        </div>
+  </div>
 </div>
+
+<button (click)="goBack()">go back</button>
 <button (click)="save()">save</button>

@@ -4,19 +4,22 @@
   <label>Hero name:
     <input #heroName />
   </label>
-  <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" [(ngModel)]="model">
+  <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" [(ngModel)]="heroType">
     <label ngbButtonLabel class="btn-primary">
-      <input ngbButton type="radio" [value]="1"> Left (pre-checked)
+      <input ngbButton type="radio" [value]="1"> Superhero
     </label>
     <label ngbButtonLabel class="btn-primary">
-      <input ngbButton type="radio" value="middle"> Middle
+      <input ngbButton type="radio" [value]="2"> Anti-hero
     </label>
     <label ngbButtonLabel class="btn-primary">
-      <input ngbButton type="radio" [value]="false"> Right
+      <input ngbButton type="radio" [value]="3"> Villain
+    </label>
+    <label ngbButtonLabel class="btn-primary">
+      <input ngbButton type="radio" [value]="4"> Sidekick
     </label>
   </div>
   <!-- (click) passes input value to add() and then clears the input -->
-  <button (click)="add(heroName.value); heroName.value=''">
+  <button (click)="add(heroName.value); heroName.value=''; heroType=1;">
     add
   </button>
 
