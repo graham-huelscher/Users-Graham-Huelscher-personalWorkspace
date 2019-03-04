@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Linq;
 using HeroesApi.Models;
 
 namespace HeroesApi.Controllers
@@ -22,7 +23,8 @@ namespace HeroesApi.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Hero>>> GetHeroes()
         {
-            return await _context.Heroes.ToListAsync();
+            //.Include(p => p.HeroTypeNavigation)
+            return await _context.Heroes.AsQueryable().ToListAsync();
             //FromSql("select Heroes.id, Heroes.name, Heroes.heroType, HeroTypes.type from Heroes, HeroTypes Where Heroes.heroType = HeroTypes.id").ToListAsync();
         }
 
