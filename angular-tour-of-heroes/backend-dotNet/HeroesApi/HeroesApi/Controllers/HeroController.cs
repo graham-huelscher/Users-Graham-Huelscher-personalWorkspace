@@ -24,7 +24,8 @@ namespace HeroesApi.Controllers
         public async Task<ActionResult<IEnumerable<Hero>>> GetHeroes()
         {
             //.Include(p => p.HeroTypeNavigation)
-            return await _context.Heroes.AsQueryable().ToListAsync();
+            return await _context.Heroes.Include(p => p.HeroTypeNavigation).ToListAsync();
+                //_context.Heroes.Include(p => p.HeroTypeNavigation).ToListAsync();
             //FromSql("select Heroes.id, Heroes.name, Heroes.heroType, HeroTypes.type from Heroes, HeroTypes Where Heroes.heroType = HeroTypes.id").ToListAsync();
         }
 
